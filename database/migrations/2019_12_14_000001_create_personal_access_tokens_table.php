@@ -20,6 +20,8 @@ return new class extends Migration
             $table->string('token', 64)->unique();
             $table->timestamp('expires_at')->nullable();
             $table->integer('is_actual')->default(User::STATUS_ACTUAL);
+
+            $table->foreignId('user_id')->onDelete('cascade');;
             $table->timestamps();
         });
     }
