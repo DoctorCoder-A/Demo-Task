@@ -32,10 +32,7 @@ class User extends Authenticatable
         'password',
     ];
 
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array<string, string>
-     */
+public const STATUS_NO_ACTUAL = 0;
+public const STATUS_ACTUAL = 1;
 
 }
