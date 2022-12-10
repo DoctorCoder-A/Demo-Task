@@ -18,3 +18,5 @@ composer-install:
 	docker-compose exec app-demo composer install
 artisan-migrate-seed:
 	docker-compose exec app-demo php artisan migrate --seed
+docker-db-bash:
+	docker-compose exec db-demo bash
