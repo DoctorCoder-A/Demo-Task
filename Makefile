@@ -13,10 +13,10 @@ docker-up:
 	docker-compose up -d
 docker-down-clear:
 	docker-compose down -v --remove-orphans
-app-init:composer-install artisan-migrate-seed
-composer-install:
+app-init:docker-composer-install docker-artisan-seed
+docker-composer-install:
 	docker-compose exec app-demo composer install
-artisan-migrate-seed:
+docker-artisan-seed:
 	docker-compose exec app-demo php artisan migrate --seed
 docker-db-bash:
 	docker-compose exec db-demo bash
