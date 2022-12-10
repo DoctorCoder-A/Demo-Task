@@ -1,0 +1,57 @@
+version: "3.8"
+
+services:
+    app-demo:
+        container_name: php-demo
+        build:
+            args:
+                user: demo
+                uid: 1000
+            context: ./docker/php
+            dockerfile: ./php.Dockerfile
+        restart: unless-stopped
+        depends_on:
+            - db-demo
+        volumes:
+            - ./:/var/www/html:delegated
+        networks:
+            - demo-network
+    webserver-demo:
+        image: nginx:1.23-alpine
+        container_name: webserver
+        restart: unless-stopped
+        ports:
+            - "${WEB_SERVER_PORT:-8080}:80"
+        volumes:
+            - ./:/var/www/html
+            - ./docker/nginx/conf.d/:/etc/nginx/conf.d/
+            - ./docker/nginx/log/:/var/log/nginx/
+        depends_on:
+            - app-demo
+            - db-demo
+        networks:
+            - demo-network
+    db-demo:
+        image: mysql:5.7.40
+        container_name: db-demo
+        restart: unless-stopped
+        ports:
+            - "${FORWARD_DB_PORT:-3306}:3306"
+        environment:
+            MYSQL_ROOT_PASSWORD: '${DB_PASSWORD}'
+            MYSQL_ROOT_HOST: "%"
+            MYSQL_DATABASE: '${DB_DATABASE}'
+            MYSQL_USER: '${DB_USERNAME}'
+            MYSQL_PASSWORD: '${DB_PASSWORD}'
+            MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
+        volumes:
+            - dbdata:/var/lib/mysql/
+            - ./docker/mysql/my.cnf:/etc/mysql/my.cnf
+        networks:
+            - demo-network
+networks:
+    demo-network:
+        driver: bridge
+volumes:
+    dbdata:
+        driver: local
