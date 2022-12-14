@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\frontend\AuthController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,3 +17,6 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+Route::match(['POST', 'GET'],'/auth', AuthController::class)
+    ->name('auth');
+
