@@ -20,3 +20,6 @@ Route::get('/', function () {
 Route::match(['POST', 'GET'],'/auth', AuthController::class)
     ->name('auth');
 
+Route::get('/lists', function () {
+    return view('lists');
+});
