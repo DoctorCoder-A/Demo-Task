@@ -21,5 +21,10 @@ get token :
 
 ` docker-compose exec app-demo  php  artisan to:auth admin password`   
 
+**links**
 
+[APP_URL/]()                 -here is the form
+you need to enter token to add text
+
+[APP_URL/lists]()         - here is the list of added texts
 
