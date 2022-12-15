@@ -20,4 +20,5 @@ Route::post('/texts', [TextController::class,'index'])
     ->name('get.texts');
 Route::put('/texts/edit', [TextController::class,'editText'])
     ->name('edit.texts');
-
+Route::post('/texts/delete', [TextController::class,'deleteText'])
+    ->name('delete.texts');

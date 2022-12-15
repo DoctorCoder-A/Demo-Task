@@ -79,6 +79,7 @@
             let linkEdit = document.createElement('a')
 
             divParent.className = 'text'
+            divParent.dataset.textDiv = value.id
             li.className = 'li'
             pName.innerText = 'name: ' +value.name
             pName.dataset.name = value.id
@@ -86,6 +87,7 @@
             pText.dataset.text = value.id
             divDeleteLink.className = 'li delete-link'
             linkDelete.innerText = 'delete'
+            linkDelete.onclick = () => {deleteContent(value.id)}
             divEditLink.className = 'li edit link'
             linkEdit.setAttribute('id', 'edit-link')
             linkEdit.onclick = () => {showEditInput(value.id)}
@@ -122,15 +124,14 @@
             .catch(error => console.log(error))
     }
     function sendRequest(option){
-        const headers = {
+        option.parameters.headers = {
             'X-CSRF-TOKEN': '{{csrf_token()}}',
             'Content-Type': 'application/json'
         }
-        option.parameters.headers = headers
        return  fetch(option.url, option.parameters)
             .then(response => {
                 if (response.status === 200) {
-                    return response.json()
+                        return response.json()
                 } else {
                     console.log('error!')
                     console.log(response.status)
@@ -164,14 +165,14 @@
     function showEditInput(id){
         buildEditInput(id)
     }
-
     function buildEditInput(id) {
         const name = document.querySelector(`[data-name="${id}"`)
         const text = document.querySelector(`[data-text="${id}"`)
 
         const nameInput = document.querySelector('#edit-name') ?? null
         const textInput = document.querySelector('#edit-text') ?? null
-
+console.log(name)
+console.log(text)
         if (!nameInput && !textInput) {
             const inputName = document.createElement('input')
             const inputText = document.createElement('input')
@@ -200,6 +201,23 @@
             textInput.remove()
             document.querySelector(`[data-edit-id="${id}"]`).innerText = 'edit'
         }
+    }
+    function deleteContent(id){
+        const url = '{{route('delete.texts')}}'
+        const method = 'POST'
+        const body = JSON.stringify({
+            id,
+            _token: '{{csrf_token()}}'
+        })
+        const parameters = {
+            method,
+            body
+        }
+        sendRequest({url, parameters})
+            .then(
+                document.querySelector(`[data-text-div="${id}"]`).remove()
+            )
+            .catch(error => console.log(error))
     }
 </script>
 </html>

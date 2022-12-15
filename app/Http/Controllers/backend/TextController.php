@@ -21,7 +21,6 @@ class TextController extends Controller
             'data' => 'required|array',
             'id' => 'required|int',
         ]);
-        \Log::info($data);
         if(array_key_exists('text', $data['data'])){
             $text = Text::whereId($data['id'])
                 ->first();
@@ -38,6 +37,17 @@ class TextController extends Controller
                 unset($text->{'text'});
                 $text->{'element'} = 'name';
         }
+        http_response_code(200);
+        return response($text);
+    }
+    public function deleteText(Request $request)
+    {
+        $data = $request->validate([
+            'id' => 'required|int'
+        ]);
+
+        $text = Text::whereId($data['id'])->delete();
+
         http_response_code(200);
         return response($text);
     }
