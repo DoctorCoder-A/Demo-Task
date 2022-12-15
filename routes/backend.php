@@ -16,6 +16,8 @@ use Illuminate\Support\Facades\Route;
 
 
 #_-------------------------------------
-Route::get('/texts', [TextController::class,'index'])
+Route::post('/texts', [TextController::class,'index'])
     ->name('get.texts');
+Route::put('/texts/edit', [TextController::class,'editText'])
+    ->name('edit.texts');
 

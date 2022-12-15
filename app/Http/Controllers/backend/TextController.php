@@ -15,4 +15,30 @@ class TextController extends Controller
         http_response_code(200);
         return response($texts);
     }
+    public function editText(Request $request)
+    {
+        $data = $request->validate([
+            'data' => 'required|array',
+            'id' => 'required|int',
+        ]);
+        \Log::info($data);
+        if(array_key_exists('text', $data['data'])){
+            $text = Text::whereId($data['id'])
+                ->first();
+                $text->update([
+                     'text' => $data['data']['text']
+                ]);
+            unset($text->{'name'});
+            $text->{'element'} = 'text';
+        }elseif (array_key_exists('name', $data['data'])){
+            $text = Text::whereId($data['id'])->first();
+                $text->update([
+                    'name' => $data['data']['name']
+                ]);
+                unset($text->{'text'});
+                $text->{'element'} = 'name';
+        }
+        http_response_code(200);
+        return response($text);
+    }
 }
